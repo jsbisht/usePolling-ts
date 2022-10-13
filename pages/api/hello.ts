@@ -10,7 +10,7 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  if (new Date().getTime() > 1665511273342) {
+  if (new Date().getTime() > 1665646183214) {
     res.status(200).json({ result: "completed", time: new Date().getTime() });
   } else {
     res.status(200).json({ result: "processing", time: new Date().getTime() });

@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 const useIsomorphicLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect;
@@ -7,6 +7,8 @@ export default function useInterval(
   callback: () => void,
   delay: number | null
 ) {
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
+  const [clearIntervalFn, setClearIntervalFn] = useState<() => void>();
   const savedCallback = useRef(callback);
 
   // Remember the latest callback if it changes.
@@ -23,7 +25,11 @@ export default function useInterval(
     }
 
     const id = setInterval(() => savedCallback.current(), delay);
+    setIntervalId(id);
+    setClearIntervalFn(() => clearInterval(intervalId));
 
-    return () => clearInterval(id);
+    return clearIntervalFn;
   }, [delay]);
+
+  return [clearIntervalFn];
 }

@@ -15,7 +15,7 @@ export function usePolling<T>(
   const [result, setResult] = useState(null);
   const [error, setError] = useState<PollingError>(null);
 
-  useInterval(async () => {
+  const [clearInterval] = useInterval(async () => {
     try {
       const { data } = await axios.get(url);
       if (predicate(data)) {
@@ -28,5 +28,5 @@ export function usePolling<T>(
     }
   }, delay);
 
-  return [result, error];
+  return [result, error, clearInterval];
 }
